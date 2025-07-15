@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+</head>
+<body>
+    <div class="Registration form">
+        <h1>Sign Up</h1>
+        <form action="../Registration/registration.php" method="post">
+            <p>Full Name:</p>
+            <input type="text" name="fullname" placeholder="Full Name">
+            <p>Email:</p>
+            <input type="email" name="email" placeholder="Email">
+            <p>Password:</p>
+            <input type="password" name="password" placeholder="Password" required>
+            <p>Confirm Password</p>
+            <input type="password" name="ConfirmPassword" placeholder="ConfirmPassword" required>
+            <p>Gender:</p>
+            
+            <input id="Male" type="radio" value="M" name="Gender" >
+            <label for="Male">Male</label>
+            
+            <input id="Female" type="radio" value="F" name="Gender">
+            <label for="Female">Female</label>
+            <p>Hobbies:</p>
+             <input id="read" type="checkbox" name="Hobbies" value="read">
+             <label for="read">Reading</label>
+            <input id="travel" type="checkbox" name="Hobbies" value="travel">
+            <label for="travel">Traveling</label>
+            <input id="Sports" type="checkbox" name="Hobbies" value="Sports">
+            <label for="sports">Sports</label>
+            <p>Country:</p>
+            <input list="Country" name="Country">
+            <datalist id="Country">
+                <option value="Egypt">
+                    <option value="United States">
+                        <option value="Libya">
+                            <option value="Saudi Arabia">
+                        
+             </datalist>
+    
+             <button type="submit">Sign Up</button>
+
+
+
+        </form>
+
+    </div>
+    
+</body>
+</html>
