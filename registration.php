@@ -83,7 +83,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         
         if ($stmt->execute()) {
             echo "Registration successful!";
-            // Clear form values
+            header("Location: userlist.php");
+            
             $name = $email = $password = $gender = $hobbies = $country = '';
         } else {
             echo "Error: " . $stmt->error;
@@ -133,14 +134,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
            
             <p>Hobbies:</p>
             <?php
-            // Initialize as array
+            
             $selected_hobbies = [];
             
-            // Get from edit data if available
+            
             if (isset($edit_data['Hobbies']) && !empty($edit_data['Hobbies'])) {
                 $selected_hobbies = explode(',', $edit_data['Hobbies']);
             }
-            // Or get from form submission if available
+            
             elseif (isset($hobbies) && is_array($hobbies)) {
                 $selected_hobbies = $hobbies;
             }
