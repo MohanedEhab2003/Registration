@@ -9,30 +9,34 @@
     <div class="Registration form">
         <h1>Sign Up</h1>
         <form action="../Registration/registration.php" method="post">
+           
             <p>Full Name:</p>
             <input type="text" name="fullname" placeholder="Full Name">
             <p>Email:</p>
             <input type="email" name="email" placeholder="Email">
+
             <p>Password:</p>
             <input type="password" name="password" placeholder="Password" required>
             <p>Confirm Password</p>
             <input type="password" name="ConfirmPassword" placeholder="ConfirmPassword" required>
-            <p>Gender:</p>
             
+            <p>Gender:</p>
             <input id="Male" type="radio" value="M" name="Gender" >
             <label for="Male">Male</label>
             
             <input id="Female" type="radio" value="F" name="Gender">
             <label for="Female">Female</label>
+           
             <p>Hobbies:</p>
-             <input id="checkbox" type="checkbox" name="Hobbies[]" value="read">
+             <input id="checkbox" type="checkbox" name="hobbies[]" value="read">
              <label for="read">Reading</label>
-            <input id="checkbox" type="checkbox" name="Hobbies[]" value="travel">
+            <input id="checkbox" type="checkbox" name="hobbies[]" value="travel">
             <label for="travel">Traveling</label>
-            <input id="checkbox" type="checkbox" name="Hobbies[]" value="Sports">
+            <input id="checkbox" type="checkbox" name="hobbies[]" value="Sports">
             <label for="sports">Sports</label>
+            
             <p>Country:</p>
-            <select name="Country" id="Country">
+            <select name="country" id="country">
                 <option value="Eg">Egypt</option>
                     <option value="US">United States</option>
                         <option value="Libya">Libya</option>
@@ -49,5 +53,4 @@
     </div>
     
 </body>
-    <script src="../Registration/registration.js"></script>
 </html>
