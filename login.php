@@ -1,75 +1,46 @@
 <?php
-session_start();
+require_once 'Db.php';
+require_once 'Session.php';
+require_once 'Validation.php';
 
-class Authentication {
-    private $conn;
-    private $host = 'localhost';
-    private $db = 'registration';
-    private $user = "root";
-    private $Password = '1234';
+$session = new Session();
+$error = '';
 
-    public function __construct($host, $user, $Password, $db) {
-        $this->conn = new mysqli($host, $user, $Password, $db);
-
-        if ($this->conn->connect_error) {
-            die("Connection failed: " . $this->conn->connect_error);
-        }
-    }
-
-    public function auth($email, $password) {
-        
-        $stmt = $this->conn->prepare("SELECT name, email, password FROM test WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        if ($result->num_rows > 0) {
-            $user = $result->fetch_assoc();
-            
-            if (password_verify($password, $user['password'])) {
-                $_SESSION['name'] = $user['name'];  
-                $_SESSION['email'] = $user['email'];
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public function __destruct() {
-        $this->conn->close();
-    }
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
-    $auth = new Authentication("localhost", "root", "1234", "registration");
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = Validation::sanitize($_POST['email']);
+    $password = $_POST['password'];
     
-    if ($auth->auth($_POST['email'], $_POST['password'])) {
-        header("Location: ./userlist.php"); 
-        exit();
+    $pdo = Database::getInstance();
+    $stmt = $pdo->prepare("SELECT * FROM test WHERE email = ?");
+    $stmt->execute([$email]);
+    $user = $stmt->fetch();
+    
+    if ($user && password_verify($password, $user['Password'])) {
+        $session->set('user_id', $user['id']);
+        $session->set('logged_in', true);
+        header('Location: userlist.php');
+        exit;
     } else {
-        $error = "Invalid credentials.";
-        echo $error;  
+        $error = 'Invalid email or password';
     }
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <title>Login Form</title>
+    <title>Login</title>
+    <style>.error { color: red; }</style>
 </head>
 <body>
-    <div class="Login form">
-        <h1>Login</h1>
-        <form action="" method="post">  
-            <p>Email:</p>
-            <input type="email" name="email" placeholder="Email" required>
-
-            <p>Password:</p>
-            <input type="password" name="password" placeholder="Password" required>
-           
-            <br><br>
-            <button type="submit" name="login">Login</button> 
-        </form>
-    </div>
+    <h1>Login</h1>
+    <?php if ($error): ?>
+        <div class="error"><?= $error ?></div>
+    <?php endif; ?>
+    <form method="POST">
+        Email: <input type="email" name="email" required><br>
+        Password: <input type="password" name="password" required><br>
+        <button type="submit">Login</button>
+    </form>
+    <p>Don't have an account? <a href="registration.php">Register</a></p>
 </body>
 </html>

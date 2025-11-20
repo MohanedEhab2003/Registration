@@ -1,19 +1,28 @@
 <?php
-// Database connection
-$conn = new mysqli('localhost', 'root', '1234', 'registration');
-if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
+require_once 'Db.php';
+require_once 'Session.php';
+require_once 'User.php';
 
-$result = $conn->query("SELECT id, name, email, gender, hobbies, country FROM test");
+$session = new Session();
+
+
+if (!$session->isLoggedIn()) {
+    header('Location: login.php');
+    exit;
+}
+
+$users = User::getAll();
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
     <title>User List</title>
 </head>
 <body>
-    <h1>User List</h1>
-    <table>
+    <h1>Registered Users</h1>
+    <p><a href="logout.php">Logout</a></p>
+    
+    <table border="1">
         <tr>
             <th>ID</th>
             <th>Name</th>
@@ -21,22 +30,31 @@ $result = $conn->query("SELECT id, name, email, gender, hobbies, country FROM te
             <th>Gender</th>
             <th>Hobbies</th>
             <th>Country</th>
-            <th>Action</th>
+            <th>Actions</th>
         </tr>
-        <?php while ($row = $result->fetch_assoc()): ?>
+        <?php foreach ($users as $user): ?>
         <tr>
-            <td><?= $row['id'] ?? '' ?></td>
-            <td><?= htmlspecialchars($row['name'] ?? '') ?></td>
-            <td><?= htmlspecialchars($row['email'] ?? '') ?></td>
-            <td><?= htmlspecialchars($row['gender'] ?? '') ?></td>
-            <td><?= htmlspecialchars($row['hobbies'] ?? '') ?></td>
-            <td><?= htmlspecialchars($row['country'] ?? '') ?></td>
+            <td><?= $user['id'] ?></td>
+            <td><?= htmlspecialchars($user['Name']) ?></td>
+            <td><?= htmlspecialchars($user['Email']) ?></td>
+            <td><?= $user['Gender'] === 'M' ? 'Male' : 'Female' ?></td>
+            <td><?= htmlspecialchars($user['Hobbies']) ?></td>
             <td>
-               <a href="registration.php?edit=<?= $row['id'] ?>">Edit</a>
+                <?php 
+                $countries = [
+                    'Eg' => 'Egypt',
+                    'US' => 'United States',
+                    'Libya' => 'Libya',
+                    'SA' => 'Saudi Arabia'
+                ];
+                echo $countries[$user['Country']] ?? $user['Country']; 
+                ?>
+            </td>
+            <td>
+                <a href="registration.php?edit=<?= $user['id'] ?>">Edit</a>
             </td>
         </tr>
-        <?php endwhile; ?>
+        <?php endforeach; ?>
     </table>
 </body>
 </html>
-<?php $conn->close(); ?>
